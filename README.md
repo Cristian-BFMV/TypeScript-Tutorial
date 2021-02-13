@@ -182,4 +182,4 @@ logDetails1 = (ninja: person) => {
 
 ## DOM manipulation
 
-Al igual que JavaScript, TypeScript permite manipular el DOM dinámicamente, tenemos acceso a los querySelectos, event listeners, etc.
+Al igual que JavaScript, TypeScript permite manipular el DOM dinámicamente, tenemos acceso a los querySelectors, event listeners, etc.
