@@ -227,7 +227,7 @@ form.addEventListener('submit', (e: Event) => {
 });
 ```
 
-## Clases
+## Classes
 
 Las clases en TypeScript funcionan exactamente igual que en JavaScript, con la diferencia que podremos aplicar todas las caracteristicas de tipado de TyepScript en nuestra clase.
 
