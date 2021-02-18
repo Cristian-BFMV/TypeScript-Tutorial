@@ -183,3 +183,76 @@ logDetails1 = (ninja: person) => {
 ## DOM manipulation
 
 Al igual que JavaScript, TypeScript permite manipular el DOM dinámicamente, tenemos acceso a los querySelectors, event listeners, etc.
+
+### querySelector
+
+La función querySelector nos permite obtener uno o varios elementos del DOM a través de un identificador. En TypeScript esta función nos puede devolver cosas un HTMLElement o null, esto es debido a que TypeScript no "sabe" si el elemento que queremos obtener existe en el DOM o no por lo que si este elemento no existe nos devuelve null y en caso de que sí exista nos devolvera el HTMLElement. Esto último puede generar un problema en nuestro código porque TypeScript detecta que podemos hacer referencia a un objeto nulo, por lo que es necesario encargarnos de esta situación en nuestro código, TypeScript nos ofrece distintas posibilidades para manejar esto, la primera de estas es:
+
+```ts
+const anchor = document.querySelector('a');
+
+if (anchor) {
+  console.log(anchor.href);
+}
+```
+
+En este caso nos aseguramos que el valor de anchor no sea nulo a través de la sentencia if. La segunda opción es la siguiente:
+
+```ts
+const anchor = document.querySelector('a')!;
+
+console.log(anchor.href);
+```
+
+En la anterior opción hacemos uso del signo !, esto le indica a TypeScript que nosotros como desarrolladores tenemos certeza que el objeto al cual deseamos acceder existe en el DOM, por lo que esta operación siempre nos devolvera un HTMLElement y no un valor nulo. La última opción es decirle a TypeScript el tipo(type casting) especifico que nos devolvera la función querySelector, de la siguiente forma.
+
+```ts
+const anchor = document.querySelector('a') as HTMLAnchorElement;
+
+console.log(anchor.href);
+```
+
+TypeScript nos ofrece la posibilidad de tipar todo los tipos de elementos de HTML, en la siguiente referencia podemos observar todos los [tipos que TypeScript tiene](https://support.west-wind.com)
+
+### Event listeners
+
+Los event listeners funcionan de la misma forma que en JavaScript en el que le pasamos el tipo de evento y un callback que sera la "encargada" de manejar ese evento, sin embargo, en TypeScrip tenemos la opción de tipar el parámetro del evento en el callback de la siguiente forma.
+
+```ts
+const form = document.querySelector('.new-item-form') as HTMLFormElement;
+
+form.addEventListener('submit', (e: Event) => {
+  e.preventDefault();
+  console.log(type.value, toFrom.value, details.value, amount.valueAsNumber);
+});
+```
+
+## Clases
+
+Las clases en TypeScript funcionan exactamente igual que en JavaScript, con la diferencia que podremos aplicar todas las caracteristicas de tipado de TyepScript en nuestra clase.
+
+```ts
+class Invoice {
+  client: string;
+  details: string;
+  amount: number;
+
+  constructor(client: string, details: string, amount: number) {
+    this.client = client;
+    this.details = details;
+    this.amount = amount;
+  }
+
+  format(): string {
+    return `${this.client} owes $${this.amount} for ${this.details}`;
+  }
+}
+```
+
+Las clases en TypeScript también nos permite tipar arreglos con la clase creada, por lo que todos los elementos de ese Array tendran que ser instancias de esa clase.
+
+```ts
+let invoices: Invoice[] = [];
+invoices.push(invOne);
+invoices.push(invTwo);
+```
