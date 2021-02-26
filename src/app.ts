@@ -2,21 +2,7 @@
 
 // console.log(anchor.href);
 
-class Invoice {
-  client: string;
-  details: string;
-  amount: number;
-
-  constructor(client: string, details: string, amount: number) {
-    this.client = client;
-    this.details = details;
-    this.amount = amount;
-  }
-
-  format(): string {
-    return `${this.client} owes $${this.amount} for ${this.details}`;
-  }
-}
+import { Invoice } from './classes/Invoice.js';
 
 const invOne = new Invoice('mario', 'Work on the mario website', 250);
 const invTwo = new Invoice('luigi', 'Work on the luigi website', 350);
@@ -28,7 +14,7 @@ invoices.push(invOne);
 invoices.push(invTwo);
 
 invoices.forEach(inv => {
-  console.log(inv.client, inv.details, inv.amount);
+  console.log(inv.client, inv.amount, inv.format());
 });
 
 const form = document.querySelector('.new-item-form') as HTMLFormElement;

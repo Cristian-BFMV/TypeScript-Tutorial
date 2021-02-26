@@ -256,3 +256,131 @@ let invoices: Invoice[] = [];
 invoices.push(invOne);
 invoices.push(invTwo);
 ```
+
+## Access modifiers
+
+Los modificadores de acceso indican el cómo se accede a las propiedades dentro de una clase, estos modificadores son el public(modificador por defecto), el private y el readonly.
+
+### public
+
+Este modificador de acceso es el que se da por defecto en todas las propiedades que como desarrollador creamos en nuestras clases, por lo que no es necesario colocar explicitamente este modificador, sin embargo, si queremos se explicitos sobre este modificador podremos hacerlo de la siguiente forma.
+
+```ts
+class Invoice {
+  public client: string;
+  public details: string;
+  public amount: number;
+
+  constructor(client: string, details: string, amount: number) {
+    this.client = client;
+    this.details = details;
+    this.amount = amount;
+  }
+
+  format(): string {
+    return `${this.client} owes $${this.amount} for ${this.details}`;
+  }
+}
+```
+
+Este modificador indica que en cualquier lugar dentro de nuestro código podremos acceder de la forma en que deseemos a estas propiedas e incluso podremos modificar su valor.
+
+### private
+
+Este modificador nos permite "controlar" el cómo desde otros lugares de nuestro código se accede a las propiedades de la clase, esto restringiendo todo el acceso directo a estas propiedades y haciendolas solo disponibles a través de funciones que definamos dentro de nuestra clase.
+
+```ts
+class Invoice {
+  private client: string;
+  private details: string;
+  private amount: number;
+
+  constructor(client: string, details: string, amount: number) {
+    this.client = client;
+    this.details = details;
+    this.amount = amount;
+  }
+
+  format(): string {
+    return `${this.client} owes $${this.amount} for ${this.details}`;
+  }
+}
+```
+
+### readonly
+
+Este modificador hace que las propiedades dentro de nuestra clase solo tengan la opción de lectura y no de modificación, esto aplica tanto para el código fuera de nuestra clase como para el código dentro de nuestra clase.
+
+```ts
+class Invoice {
+  readonly client: string;
+  readonly details: string;
+  readonly amount: number;
+
+  constructor(client: string, details: string, amount: number) {
+    this.client = client;
+    this.details = details;
+    this.amount = amount;
+  }
+
+  format(): string {
+    return `${this.client} owes $${this.amount} for ${this.details}`;
+  }
+}
+```
+
+Mediante estos modificadores de acceso, TypeScript nos ofrece otra forma de definir las propiedades en el constructor de nuestra clase:
+
+```ts
+class Invoice {
+  constructor(readonly client: string, private details: string, public amount: number) {}
+
+  format(): string {
+    return `${this.client} owes $${this.amount} for ${this.details}`;
+  }
+}
+```
+
+De esta forma no debemos definir las propiedades de forma explicita en nuestra clase y después asignar los valores en el constructor, si no que TypeScript automaticamente define estos valores como propiedades dentro de nuestra clase. Para esta funcionalidad es imprescindible el uso de los modificadores de acceso en el constructor.
+
+## Modules
+
+Para trabajar con los modulos de ES moderno, debemos modificar dos opciones dentro de el archivo de configuración de TypeScript, estas opciones son:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es2015"
+  }
+}
+```
+
+Adicionalmente, en el archivo de html de nuestra carpeta public, debemos especificar que el archivo de JavaScript al cual compila TypeScript es de tipo module, esto lo hacemos de la siguiente forma
+
+```html
+<script type="module" src="app.js"></script>
+```
+
+El uso de los modulos en TypeScript es exactamente igual al que se tiene en JavaScript moderno, en el cual exportamos desde un modulo lo que deseemos usar en otro modulo mediante los imports.
+
+classes/Invoice.ts
+
+```ts
+export class Invoice {
+  constructor(readonly client: string, private details: string, public amount: number) {}
+
+  format(): string {
+    return `${this.client} owes $${this.amount} for ${this.details}`;
+  }
+}
+```
+
+app.ts
+
+```ts
+import { Invoice } from './classes/Invoice.js';
+
+const invOne = new Invoice('mario', 'Work on the mario website', 250);
+const invTwo = new Invoice('luigi', 'Work on the luigi website', 350);
+```
