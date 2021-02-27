@@ -384,3 +384,120 @@ import { Invoice } from './classes/Invoice.js';
 const invOne = new Invoice('mario', 'Work on the mario website', 250);
 const invTwo = new Invoice('luigi', 'Work on the luigi website', 350);
 ```
+
+## Interfaces
+
+Las interfaces nos sirven para definir la estructura que debe de seguir una clase que implemente dicha interfaz, esto a través de definir los atributos y funciones con su respectivo tipado. En TypeScript podremos definir una interfaz de la siguiente forma:
+
+```ts
+interface IsPerson {
+  name: string;
+  age: number;
+  speak(a: string): void;
+  spend(a: number): number;
+}
+```
+
+Teniendo esta interfaz definido podemos usarla para que objetos que deseemos crear sigan esta estructura definida en la interfaz.
+
+```ts
+const me: IsPerson = {
+  name: 'Cristian',
+  age: 23,
+  speak: (a: string): void => {
+    console.log(a);
+  },
+  spend: (amount: number): number => {
+    console.log('I spent', amount);
+    return amount;
+  },
+};
+```
+
+## Interfaces with classes
+
+Las interfaces pueden ser usadas también con clases para definir la estructura que debe seguir una clase. Esto se hace de la siguiente forma
+
+interfaces/HasFormatter.ts
+
+```ts
+export interface HasFormatter {
+  format(): string;
+}
+```
+
+classes/Invoice.ts
+
+```ts
+import { HasFormatter } from '../interfaces/HasFormatter';
+
+export class Invoice implements HasFormatter {
+  constructor(readonly client: string, private details: string, public amount: number) {}
+
+  format(): string {
+    return `${this.client} owes $${this.amount} for ${this.details}`;
+  }
+}
+```
+
+Defiendo clases que implementen interfaces podemos hacer uso de polimorfismo en el que podremos definir variables de tipo HasFormatter e instaciar alguna de las clases que implementa esta interfaz, esto lo podemos hacer de la siguiente forma.
+
+```ts
+import { Invoice } from './classes/Invoice.js';
+import { Payment } from './classes/Payment.js';
+import { HasFormatter } from './interfaces/HasFormatter';
+
+let docOne: HasFormatter;
+let docTwo: HasFormatter;
+
+docOne = new Invoice('yoshi', 'web work', 250);
+docTwo = new Payment('mario', 'plumbing work', 200);
+
+let docs: HasFormatter[] = [];
+
+docs.push(docOne);
+docs.push(docTwo);
+```
+
+## Generics
+
+Los generics nos sirven para hacer que nuestras funciones sirvan con varios tipos de objetos y/o tipos, lo que permite que como desarrolladores creemos cualquier tipo de objeto y que dichas funciones puedan ser usadas con el tipo de objeto que deseemos.
+
+```ts
+const addUID = <T extends { name: string }>(obj: T) => {
+  let uid = Math.floor(Math.random() * 100);
+  return { ...obj, uid };
+};
+
+let docOne = addUID({ name: 'yoshi', age: 23 });
+```
+
+Los generics en TypeScript funcionan a través de los signos <>, en estos definimos los tipos genericos que recibiremos en nuestra función y estos a su vez se usan para tipar los parámetros que recibe la función. Por otra parte, podemos usar las diferentes herramientas que nos ofrece TypeScript para tipar los tipos genericos de nuestra función.
+
+Los tipos genericos también funcionan con interfaces, esto nos permite definir que las propiedades dentro de nuestra interfaz puedan ser de cualquier tipo que necesitemos en nuestro código.
+
+```ts
+interface Resource<T> {
+  uid: number;
+  resourceName: string;
+  data: T;
+}
+
+const docTwo: Resource<string> = {
+  uid: 1,
+  resourceName: 'person',
+  data: 'Buenas tardes',
+};
+
+const docThree: Resource<object> = {
+  uid: 2,
+  resourceName: 'person 2',
+  data: { name: 'Cristian' },
+};
+
+const docFour: Resource<string[]> = {
+  uid: 3,
+  resourceName: 'shopping list',
+  data: ['bread', 'milk'],
+};
+```
