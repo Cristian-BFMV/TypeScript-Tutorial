@@ -387,7 +387,7 @@ const invTwo = new Invoice('luigi', 'Work on the luigi website', 350);
 
 ## Interfaces
 
-Las interfaces nos sirven para definir la estructura que debe de seguir una clase que implemente dicha interfaz, esto a través de definir los atributos y funciones con su respectivo tipado. En TypeScript podremos definir una interfaz de la siguiente forma:
+Las interfaces nos sirven para definir la estructura que debe de seguir una clase y/o un obejto que implemente dicha interfaz, esto a través de definir los atributos y funciones con su respectivo tipado. En TypeScript podremos definir una interfaz de la siguiente forma:
 
 ```ts
 interface IsPerson {
@@ -398,7 +398,7 @@ interface IsPerson {
 }
 ```
 
-Teniendo esta interfaz definido podemos usarla para que objetos que deseemos crear sigan esta estructura definida en la interfaz.
+Teniendo esta interfaz definida podemos usarla para que objetos que deseemos crear sigan esta estructura definida en la interfaz.
 
 ```ts
 const me: IsPerson = {
@@ -440,7 +440,7 @@ export class Invoice implements HasFormatter {
 }
 ```
 
-Defiendo clases que implementen interfaces podemos hacer uso de polimorfismo en el que podremos definir variables de tipo HasFormatter e instaciar alguna de las clases que implementa esta interfaz, esto lo podemos hacer de la siguiente forma.
+Definiendo clases que implementen interfaces podemos hacer uso de polimorfismo en el que podremos definir variables de tipo HasFormatter e instaciar alguna de las clases que implementa esta interfaz, esto lo podemos hacer de la siguiente forma.
 
 ```ts
 import { Invoice } from './classes/Invoice.js';
@@ -500,4 +500,87 @@ const docFour: Resource<string[]> = {
   resourceName: 'shopping list',
   data: ['bread', 'milk'],
 };
+```
+
+## Enums
+
+Esta caracteristica de TypeScript nos permite definir una serie de constantes las cuales sean descriptivas para nuestra lógica de negocio. Los enums los podremos definir de la siguiente forma.
+
+```ts
+enum ResourceType {
+  BOOK,
+  AUTHOR,
+  FILM,
+  DIRECTOR,
+  PERSON,
+}
+```
+
+Los enum toman cada "atributo" y le asignan un valor númerico a cada uno de estos, en este caso el "atributo" BOOK tomará el valor 0, el "atributo" AUTHOR tomará el valor 1 y así sucesivamente. Por otra parte, también podremos asignar valores a los atributos dentro de un enum.
+
+```ts
+enum ResourceType {
+  BOOK = 12,
+  AUTHOR = 14,
+  FILM = 25,
+  DIRECTOR = 26,
+  PERSON = 17,
+}
+```
+
+También podremos crear enums de tipo string y en este caso hay una diferencia respecto a los enums númericos es que a estos debemos asignarle un valor en la definición de dichos enums.
+
+```ts
+enum Direction {
+  Up = 'UP',
+  Down = 'DOWN',
+  Left = 'LEFT',
+  Right = 'RIGHT',
+}
+```
+
+Nota: también podremos combinar los tipos dentro de un enum.
+
+Finalmente podremos usar estos enums para tipar atributos dentro de nuestros objetos y/o clases para que estos atributos no se salgan de los valores definidos en los enums.
+
+```ts
+enum ResourceType {
+  BOOK = 12,
+  AUTHOR = 14,
+  FILM = 25,
+  DIRECTOR = 26,
+  PERSON = 17,
+}
+
+interface Resource<T> {
+  uid: number;
+  resourceType: ResourceType;
+  data: T;
+}
+
+const docTwo: Resource<string> = {
+  uid: 1,
+  resourceType: ResourceType.BOOK,
+  data: 'Buenas tardes',
+};
+
+const docThree: Resource<object> = {
+  uid: 2,
+  resourceType: ResourceType.DIRECTOR,
+  data: { name: 'Cristian' },
+};
+
+const docFour: Resource<string[]> = {
+  uid: 3,
+  resourceType: ResourceType.PERSON,
+  data: ['bread', 'milk'],
+};
+```
+
+## Tuples
+
+Las tuplas son un tipo de arreglo en el que tenemos que definir explicitamente el tipo de variables que debe ir en cada indice del arreglo, una vez definido estos tipos no podremos modificar el tipo de un indice para que sea de otro tipo diferente.
+
+```ts
+let tuple: [string, number, boolean] = ['Cristian', 23, true];
 ```
